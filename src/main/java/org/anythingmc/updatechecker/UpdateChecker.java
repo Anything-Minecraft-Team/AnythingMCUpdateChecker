@@ -1,6 +1,7 @@
 package org.anythingmc.updatechecker;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,7 +45,7 @@ public class UpdateChecker {
         data = Files.readString(Path.of("config.json"));
         config = gson.fromJson(data, Config.class);
 
-        Requests.getSpigotPluginInfo(links[0].urls[0]);
+        JsonObject object = Requests.getSpigotPluginInfo(links[0].urls[0]);
 
         // Timer task
         TimerTask task = new TimerTask() {

@@ -1,42 +1,39 @@
 package org.anythingmc.updatechecker;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
-import static org.anythingmc.updatechecker.UpdateChecker.gson;
 
 public class Requests {
     public static final String SPIGOT_API_URL = "https://api.spiget.org/v2/resources/";
+    public static final CloseableHttpClient httpClient = HttpClients.createDefault();
 
     @Nullable
-    public static PluginInfo getSpigotPluginInfo(String url) {
+    public static JsonObject getSpigotPluginInfo(String url) {
         int index = url.lastIndexOf("/");
         if (index == -1) {
             System.out.println("An invalid resource has been passed");
             return null;
         }
         String resourceCode = url.substring(index);
+
         try {
-            HttpURLConnection request = (HttpURLConnection) new URL(SPIGOT_API_URL + resourceCode).openConnection();
-            int responseCode = request.getResponseCode();
-            if (responseCode != 200) {
-                InputStream error = request.getErrorStream();
-                System.out.println(error);
-                return null;
+            HttpGet get = new HttpGet(SPIGOT_API_URL + resourceCode);
+            CloseableHttpResponse response = httpClient.execute(get);
+            int statusCode = response.getStatusLine().getStatusCode();
+            if (statusCode != 200) {
+                System.out.println(response.getStatusLine().getReasonPhrase());
             }
-            InputStreamReader reader = new InputStreamReader(request.getInputStream());
-            BufferedReader bufferedReader = new BufferedReader(reader);
-            String input;
-            while ((input = bufferedReader.readLine()) != null) {
-                System.out.println(input);
-            }
-            return gson.fromJson(reader, PluginInfo.class);
+            JsonElement element = new JsonParser().parse(new InputStreamReader(response.getEntity().getContent()));
+            return element.getAsJsonObject();
         } catch (IOException error) {
             error.printStackTrace();
             return null;
