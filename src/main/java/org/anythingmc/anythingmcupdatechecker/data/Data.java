@@ -107,4 +107,23 @@ public class Data {
     public int getVersion(JsonElement json){
         return json.getAsJsonObject().get("version").getAsJsonObject().get("id").getAsInt();
     }
+
+    public String getWebhook(){
+
+        //JSON parser object to parse read file
+        JsonParser jsonParser = new JsonParser();
+
+        InputStream inputStream = this.getClass().getResourceAsStream("/config.json");
+        assert inputStream != null;
+        JsonReader reader = new JsonReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+        //Read JSON file
+        Object obj = jsonParser.parse(reader);
+
+        JsonArray jsonArray = (JsonArray) obj;
+
+        // get the first section in the json list
+        JsonObject jsonObject = (JsonObject) jsonArray.get(0);
+
+        return list;
+    }
 }

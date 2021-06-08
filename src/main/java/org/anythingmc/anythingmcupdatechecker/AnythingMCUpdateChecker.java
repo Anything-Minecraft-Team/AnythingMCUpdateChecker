@@ -4,10 +4,10 @@ public class AnythingMCUpdateChecker {
 
     public static void main(String[] args) {
 
-        CheckForUpdates checkForUpdates = new CheckForUpdates();
+        new CheckForUpdates();
         /**Timer timer = new Timer ();
         TimerTask t = new TimerTask() {
-            @Override
+            @Overrideh
             public void run () {
                 // some code
             }
