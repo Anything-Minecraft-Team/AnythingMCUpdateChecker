@@ -1,4 +1,4 @@
-package main.java;
+package org.anythingmc.anythingmcupdatechecker.data;
 
 import com.google.gson.JsonElement;
 import main.java.data.Data;

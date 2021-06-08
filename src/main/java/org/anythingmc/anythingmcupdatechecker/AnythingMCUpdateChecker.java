@@ -1,4 +1,4 @@
-package main.java;
+package org.anythingmc.anythingmcupdatechecker.data;
 
 public class AnythingMCUpdateChecker {
 
