@@ -1,4 +1,4 @@
 Manifest-Version: 1.0
-Main-Class: org.anythingmc.anythingmcupdatechecker.AnythingMCUpdateCheck
+Main-Class: org.anythingmc.AnythingMcUpdateChecker.AnythingMCUpdateCheck
  er
 

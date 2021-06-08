@@ -1,4 +1,4 @@
-package org.anythingmc.anythingmcupdatechecker;
+package org.anythingmc.AnythingMcUpdateChecker;
 
 import java.io.File;
 
