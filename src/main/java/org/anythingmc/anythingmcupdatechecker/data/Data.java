@@ -28,7 +28,6 @@ public class Data {
         List<String> list = new ArrayList<>();
 
         InputStream inputStream = this.getClass().getResourceAsStream("/links.json");
-        assert inputStream != null;
         JsonReader reader = new JsonReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
         //Read JSON file
         Object obj = jsonParser.parse(reader);
@@ -114,16 +113,14 @@ public class Data {
         JsonParser jsonParser = new JsonParser();
 
         InputStream inputStream = this.getClass().getResourceAsStream("/config.json");
-        assert inputStream != null;
         JsonReader reader = new JsonReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
         //Read JSON file
         Object obj = jsonParser.parse(reader);
 
-        JsonArray jsonArray = (JsonArray) obj;
+        JsonObject jsonArray = (JsonObject) obj;
 
         // get the first section in the json list
-        JsonElement jsonObject = jsonArray;
 
-        return jsonObject.getAsJsonObject().get("webhook").getAsString();
+        return jsonArray.getAsJsonObject().get("webhook").getAsString();
     }
 }

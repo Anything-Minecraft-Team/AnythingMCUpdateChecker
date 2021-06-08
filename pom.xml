@@ -4,9 +4,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.anythingmc</groupId>
+    <groupId>org.anythingmc.anythingmcupdatechecker</groupId>
     <artifactId>AnythingMCUpdateChecker</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -14,11 +17,25 @@
         <maven.compiler.target>11</maven.compiler.target>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>my-alternate-repository</id>
+            <url>http://myrepo.net/repo</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
-            <version>2.8.7</version>
+            <version>2.8.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.200</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>
