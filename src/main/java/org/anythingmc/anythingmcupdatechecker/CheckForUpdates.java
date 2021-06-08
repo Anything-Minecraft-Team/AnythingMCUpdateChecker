@@ -13,6 +13,7 @@ public class CheckForUpdates {
 
     public CheckForUpdates(){
         int upToDate = 0, outOfDate = 0;
+        String url = data.getWebhook();
 
         List<String> spigotLinks = data.getLinks(0);
         for(String link : spigotLinks){
@@ -21,7 +22,7 @@ public class CheckForUpdates {
             System.out.println("Name: " + data.getPluginName(element) + "\nSupported Versions: " + data.getPluginVersions(element) + "\nVersion ID: " + data.getVersion(element) + "\nSkript: " + data.isSkript(element));
 
             try {
-                DiscordWebhook webhook = new DiscordWebhook(data.getLinks(0));
+                DiscordWebhook webhook = new DiscordWebhook(url);
                 webhook.setAvatarUrl("https://cdn.discordapp.com/attachments/837476686978482207/848859250489819156/Untitled.png");
                 webhook.addEmbed(new DiscordWebhook.EmbedObject()
                         .setTitle(data.getPluginName(element))
