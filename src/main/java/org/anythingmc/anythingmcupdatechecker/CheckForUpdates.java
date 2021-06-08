@@ -2,7 +2,6 @@ package org.anythingmc.anythingmcupdatechecker;
 
 import com.google.gson.JsonElement;
 import org.anythingmc.anythingmcupdatechecker.data.Data;
-import org.anythingmc.anythingmcupdatechecker.data.DiscordWebhook;
 
 import java.awt.*;
 import java.io.IOException;
