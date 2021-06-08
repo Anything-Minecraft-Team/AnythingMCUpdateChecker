@@ -1,4 +1,4 @@
-package org.anythingmc.anythingmcupdatechecker.data;
+package org.anythingmc.anythingmcupdatechecker;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.awt.Color;

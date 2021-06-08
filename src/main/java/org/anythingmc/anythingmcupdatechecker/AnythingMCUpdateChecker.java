@@ -1,4 +1,4 @@
-package org.anythingmc.anythingmcupdatechecker.data;
+package org.anythingmc.anythingmcupdatechecker;
 
 public class AnythingMCUpdateChecker {
 

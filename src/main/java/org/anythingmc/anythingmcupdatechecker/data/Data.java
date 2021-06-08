@@ -1,4 +1,4 @@
-package main.java.data;
+package org.anythingmc.anythingmcupdatechecker.data;
 
 import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
