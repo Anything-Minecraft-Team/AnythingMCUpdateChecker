@@ -1,13 +1,22 @@
 package org.anythingmc.anythingmcupdatechecker;
 
+import java.io.File;
+
 public class AnythingMCUpdateChecker {
 
     public static void main(String[] args) {
 
+        System.out.println("online");
+
+        File theDir = new File("./AnythingMCUpdateChecker");
+        if (!theDir.exists()){
+            theDir.mkdirs();
+        }
+
         new CheckForUpdates();
         /**Timer timer = new Timer ();
         TimerTask t = new TimerTask() {
-            @Overrideh
+            @Override
             public void run () {
                 // some code
             }
