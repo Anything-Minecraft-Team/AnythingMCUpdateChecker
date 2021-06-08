@@ -29,6 +29,11 @@
             <version>2.8.0</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>16.0.1</version>
+        </dependency>
     </dependencies>
 
     <build>
