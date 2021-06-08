@@ -21,7 +21,7 @@ public class CheckForUpdates {
             System.out.println("Name: " + data.getPluginName(element) + "\nSupported Versions: " + data.getPluginVersions(element) + "\nVersion ID: " + data.getVersion(element) + "\nSkript: " + data.isSkript(element));
 
             try {
-                DiscordWebhook webhook = new DiscordWebhook("https://discord.com/api/webhooks/851606277641732137/cxs6EiX_p99WyxX-nKgNW_Zu3MNadum1ejmT5weF6IcKcgwGSy7jqKu1C_nwfA6VwV63");
+                DiscordWebhook webhook = new DiscordWebhook(data.getLinks(0));
                 webhook.setAvatarUrl("https://cdn.discordapp.com/attachments/837476686978482207/848859250489819156/Untitled.png");
                 webhook.addEmbed(new DiscordWebhook.EmbedObject()
                         .setTitle(data.getPluginName(element))
