@@ -1,4 +1,4 @@
-package main.java.data;
+package org.anythingmc.anythingmcupdatechecker.data;
 
 import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.lang.reflect.Type;
@@ -26,25 +27,22 @@ public class Data {
 
         List<String> list = new ArrayList<>();
 
-        try (InputStream inputStream = Data.class.getResourceAsStream("/main/resources/links.json")) {
-            System.out.println(inputStream);
-            JsonReader reader = new JsonReader(new InputStreamReader(inputStream, "UTF-8"));
-            //Read JSON file
-            Object obj = jsonParser.parse(reader);
+        InputStream inputStream = this.getClass().getResourceAsStream("/links.json");
+        assert inputStream != null;
+        JsonReader reader = new JsonReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+        //Read JSON file
+        Object obj = jsonParser.parse(reader);
 
-            JsonArray jsonArray = (JsonArray) obj;
+        JsonArray jsonArray = (JsonArray) obj;
 
-            //employeeList.forEach(emp -> list.add( emp.getAsJsonObject().toString() ));
+        //employeeList.forEach(emp -> list.add( emp.getAsJsonObject().toString() ));
 
-            // get the first section in the json list
-            JsonObject jsonObject = (JsonObject) jsonArray.get(type);
+        // get the first section in the json list
+        JsonObject jsonObject = (JsonObject) jsonArray.get(type);
 
-            // adds all the links from the list
-            jsonObject.get("links").getAsJsonArray().forEach(link -> list.add(link.toString()));
+        // adds all the links from the list
+        jsonObject.get("links").getAsJsonArray().forEach(link -> list.add(link.toString()));
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         return list;
     }
 

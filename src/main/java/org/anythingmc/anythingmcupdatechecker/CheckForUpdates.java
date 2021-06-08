@@ -1,7 +1,7 @@
-package main.java;
+package org.anythingmc.anythingmcupdatechecker;
 
 import com.google.gson.JsonElement;
-import main.java.data.Data;
+import org.anythingmc.anythingmcupdatechecker.data.Data;
 
 import java.awt.*;
 import java.io.IOException;
