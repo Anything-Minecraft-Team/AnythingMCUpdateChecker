@@ -122,8 +122,8 @@ public class Data {
         JsonArray jsonArray = (JsonArray) obj;
 
         // get the first section in the json list
-        JsonObject jsonObject = (JsonObject) jsonArray.get(0);
+        JsonElement jsonObject = jsonArray;
 
-        return list;
+        return jsonObject.getAsJsonObject().get("webhook").getAsString();
     }
 }
