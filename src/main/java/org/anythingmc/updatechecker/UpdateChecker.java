@@ -44,7 +44,7 @@ public class UpdateChecker {
         links = gson.fromJson(data, Link[].class);
 
         // Parse the config
-        data = Files.readString(Path.of("config.json"));;
+        data = Files.readString(Path.of("config.json"));
         config = gson.fromJson(data, Config.class);
 
         // Initialise request object
