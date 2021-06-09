@@ -1,3 +1,4 @@
 {
-  "checkInterval": 600
+  "checkInterval": 600,
+  "requestTimeout": 5
 }

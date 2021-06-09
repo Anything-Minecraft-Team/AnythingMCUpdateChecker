@@ -17,8 +17,9 @@
 
     <repositories>
         <repository>
-            <id>my-alternate-repository</id>
-            <url>http://myrepo.net/repo</url>
+            <name>jcenter</name>
+            <id>bintray-jcenter</id>
+            <url>https://jcenter.bintray.com</url>
         </repository>
     </repositories>
 
@@ -33,6 +34,11 @@
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
             <version>4.5.13</version>
+        </dependency>
+        <dependency>
+            <groupId>club.minnced</groupId>
+            <artifactId>discord-webhooks</artifactId>
+            <version>0.5.7</version>
         </dependency>
     </dependencies>
 
