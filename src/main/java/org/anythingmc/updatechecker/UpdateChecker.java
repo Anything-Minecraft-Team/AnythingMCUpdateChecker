@@ -51,9 +51,14 @@ public class UpdateChecker {
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
+                checkUpdates();
             }
         };
         Timer timer = new Timer();
         timer.schedule(task, config.checkInterval * 1000L);
+    }
+
+    private static void checkUpdates() {
+
     }
 }
