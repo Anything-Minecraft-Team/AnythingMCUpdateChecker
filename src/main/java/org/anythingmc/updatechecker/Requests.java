@@ -37,8 +37,8 @@ public class Requests {
         }
         String resourceCode = url.substring(index);
 
+        HttpGet get = new HttpGet(SPIGOT_API_URL + resourceCode);
         try {
-            HttpGet get = new HttpGet(SPIGOT_API_URL + resourceCode);
             HttpResponse response = httpClient.execute(get);  // stops here
             int statusCode = response.getStatusLine().getStatusCode();
             if (statusCode != 200) {
@@ -50,6 +50,8 @@ public class Requests {
         } catch (IOException error) {
             error.printStackTrace();
             return Optional.empty();
+        } finally {
+            get.releaseConnection();
         }
     }
 }
