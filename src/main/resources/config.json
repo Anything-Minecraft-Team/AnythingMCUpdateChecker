@@ -1,5 +1,7 @@
 {
   "checkInterval": 600,
   "requestTimeout": 5,
-  "webhookUrl": ""
+  "webhookUrl": "",
+  "botName": "",
+  "avatarUrl": ""
 }
