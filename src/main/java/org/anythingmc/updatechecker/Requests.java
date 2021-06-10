@@ -20,8 +20,8 @@ public class Requests {
     public HttpClient httpClient;
 
     public Requests() {
-        int timeout = config.requestTimeout * 1000;
-        RequestConfig requestConfig = RequestConfig.custom()
+        int timeout = config.requestTimeout * 1000;  // converts the seconds to milliseconds
+        RequestConfig requestConfig = RequestConfig.custom() // adds timeout to the http client to speed up requests
                 .setConnectTimeout(timeout)
                 .setConnectionRequestTimeout(timeout)
                 .setSocketTimeout(timeout)
@@ -41,7 +41,7 @@ public class Requests {
         try {
             HttpResponse response = httpClient.execute(get);  // stops here
             int statusCode = response.getStatusLine().getStatusCode();
-            if (statusCode != 200) {
+            if (statusCode != 200) {  // Status code 200 --> OK
                 System.out.println(response.getStatusLine().getReasonPhrase());
                 return Optional.empty();
             }
