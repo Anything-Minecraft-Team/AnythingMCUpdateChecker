@@ -22,9 +22,10 @@ public class UpdateChecker {
 
         // Check if links.json exists
         // TODO: logging
+        InputStream stream;
         if (!Files.exists(Path.of("links.json"))) {
             System.out.println("Could not find links.json, generating one for you...");
-            InputStream stream = UpdateChecker.class.getResourceAsStream("/links.json");
+            stream = UpdateChecker.class.getResourceAsStream("/links.json");
             assert stream != null;
             Files.copy(stream, Path.of("links.json"));
             System.out.println("Exiting...");
@@ -34,7 +35,7 @@ public class UpdateChecker {
         // Check if config.json exists
         if (!Files.exists(Path.of("config.json"))) {
             System.out.println("Could not find config.json, generating one for you...");
-            InputStream stream = UpdateChecker.class.getResourceAsStream("/config.json");
+            stream = UpdateChecker.class.getResourceAsStream("/config.json");
             assert stream != null;
             Files.copy(stream, Path.of("config.json"));
         }
@@ -50,17 +51,15 @@ public class UpdateChecker {
         // Initialise request object
         request = new Requests();
 
-        checkUpdates();
-
         // Timer task
-//        TimerTask task = new TimerTask() {
-//            @Override
-//            public void run() {
-//                checkUpdates();
-//            }
-//        };
-//        Timer timer = new Timer();
-//        timer.schedule(task, 0, config.checkInterval * 1000L);
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                checkUpdates();
+            }
+        };
+        Timer timer = new Timer();
+        timer.schedule(task, 0, config.checkInterval * 1000L);
     }
 
     private static void checkUpdates() {
