@@ -21,6 +21,7 @@ public class UpdateChecker {
     public static Config config;
     public static Requests request;
     public static WebhookClient webhookClient;
+    public static Database database = new Database();
 
     public static boolean doesFileExist(String filename) throws IOException {
         Path path = Path.of(filename);

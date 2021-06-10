@@ -115,3 +115,7 @@ run/
 # configuration files
 links.json
 config.json
+
+# database
+data.mv.db
+data.trace.db
