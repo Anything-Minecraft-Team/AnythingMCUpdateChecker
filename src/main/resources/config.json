@@ -1,4 +1,5 @@
 {
   "checkInterval": 600,
-  "requestTimeout": 5
+  "requestTimeout": 5,
+  "webhookUrl": ""
 }

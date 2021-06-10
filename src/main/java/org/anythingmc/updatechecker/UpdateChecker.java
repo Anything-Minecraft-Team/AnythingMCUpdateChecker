@@ -18,26 +18,28 @@ public class UpdateChecker {
     public static Config config;
     public static Requests request;
 
+    public static boolean doesFileExist(String filename) throws IOException {
+        Path path = Path.of(filename);
+        if (!Files.exists(path)) {
+            System.out.printf("Could not find %s, generating it for you...\n", filename);
+            InputStream stream = UpdateChecker.class.getResourceAsStream("/" + filename);
+            assert stream != null;
+            Files.copy(stream, path);
+            return false;
+        }
+        return true;
+    }
+
     public static void main(String[] args) throws IOException {
 
-        // Check if links.json exists
+        // Check if resources exist in working directory
         // TODO: logging
-        InputStream stream;
-        if (!Files.exists(Path.of("links.json"))) {
-            System.out.println("Could not find links.json, generating one for you...");
-            stream = UpdateChecker.class.getResourceAsStream("/links.json");
-            assert stream != null;
-            Files.copy(stream, Path.of("links.json"));
-            System.out.println("Exiting...");
-            System.exit(0);
-        }
+        boolean configExists = doesFileExist("config.json");
+        boolean linksExists = doesFileExist("links.json");
 
-        // Check if config.json exists
-        if (!Files.exists(Path.of("config.json"))) {
-            System.out.println("Could not find config.json, generating one for you...");
-            stream = UpdateChecker.class.getResourceAsStream("/config.json");
-            assert stream != null;
-            Files.copy(stream, Path.of("config.json"));
+        if (!configExists || !linksExists) {
+            System.out.println("Exiting...");
+            System.exit(1);
         }
 
         // Parse the links
