@@ -144,13 +144,9 @@ public class UpdateChecker {
 
                     String oldVersions = resourceInfo.versions;
                     String oldRating = resourceInfo.rating;
-
-
+                    
                     if(!oldRating.equals(rating))
                         isRatingOutdated = true;
-
-                    System.out.println(resourceInfo.url + ": " + versions);
-                    System.out.println(resourceInfo.url + ": " + oldVersions);
 
                     if (versions.size() == 1){
                             if(!versions.get(0).getAsString().equals(oldVersions))
@@ -176,7 +172,7 @@ public class UpdateChecker {
                     embedBuilder.setTitle(new WebhookEmbed.EmbedTitle("Check failed", resourceInfo.url))
                             .setDescription(String.format("Could not check for updates for [this](%s) project, an error has occurred", resourceInfo.url))
                             .setColor(0xFF0000);
-                    webhookClient.send(embedBuilder.build());
+                    //webhookClient.send(embedBuilder.build());
                     System.out.println("Request failed for the url: " + resourceInfo.url);
                 }
             }
