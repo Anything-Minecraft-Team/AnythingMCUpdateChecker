@@ -19,6 +19,7 @@ import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Getter
 public class UpdateChecker {
 
     public static Gson gson = new Gson();
@@ -138,6 +139,8 @@ public class UpdateChecker {
                 if (optionalObject.isPresent()) {
                     JsonObject object = optionalObject.get();
 
+                    WebhookEmbedBuilder resourceEmbedBuilder = new WebhookEmbedBuilder();
+
                     JsonArray versions = object.get("testedVersions").getAsJsonArray();
                     String rating = object.get("rating").getAsJsonObject().get("average").getAsString();
                     rating = rating.substring(0, Math.min(rating.length(), 4));
@@ -145,28 +148,43 @@ public class UpdateChecker {
                     String oldVersions = resourceInfo.versions;
                     String oldRating = resourceInfo.rating;
                     
-                    if(!oldRating.equals(rating))
+                    if(!oldRating.equals(rating)) {
                         isRatingOutdated = true;
+                        resourceEmbedBuilder.addField(new WebhookEmbed.EmbedField(true, "Rating", "Old: " + oldRating + "\nNew: " + rating));
+                    }
 
                     if (versions.size() == 1){
-                            if(!versions.get(0).getAsString().equals(oldVersions))
+                            if(!versions.get(0).getAsString().equals(oldVersions)) {
                                 isVersionOutdated = true;
+                                resourceEmbedBuilder.addField(new WebhookEmbed.EmbedField(true, "Version", "Old: " + oldVersions + "\nNew: " + versions.get(0).getAsString()));
+                            }
 
                     } else if(versions.size() == 2){
                         String versionsTogether = versions.get(0).getAsString() + "-" + versions.get(1).getAsString();
-                        if(!versionsTogether.equals(oldVersions))
+                        if(!versionsTogether.equals(oldVersions)) {
                             isVersionOutdated = true;
+                            resourceEmbedBuilder.addField(new WebhookEmbed.EmbedField(true, "Version", "Old: " + oldVersions + "\nNew: " + versions.get(0).getAsString() + "-" + versions.get(1).getAsString()));
+                        }
                     }
 
                     if (!isRatingOutdated && !isVersionOutdated && !isStatusOutdated) {
                         upToDate++;
                     } else {
+                        String urlId = resourceInfo.url;
+                        if (urlId.endsWith("/"))
+                            urlId = urlId.substring(0, urlId.length() - 1);
+                        int index = urlId.lastIndexOf("/");
+
+                        String resourceCode = urlId.substring(index);
+                        resourceCode = resourceCode.replaceAll("/", "");
+
                         outOfDate++;
                         String name = object.get("name").getAsString();
-                        embedBuilder.setTitle(new WebhookEmbed.EmbedTitle(name, resourceInfo.url))
+                        resourceEmbedBuilder.setTitle(new WebhookEmbed.EmbedTitle(name, resourceInfo.url))
                                 .setColor(0x00FFB9)
-                                .setDescription(String.format("`%s` is out of date, click [here](%s)", name, resourceInfo.url));
-                        webhookClient.send(embedBuilder.build());
+                                .setDescription(String.format("`%s` is out of date, click [here](%s)", name, resourceInfo.url))
+                                .setFooter(new WebhookEmbed.EmbedFooter(resourceCode, null));
+                        webhookClient.send(resourceEmbedBuilder.build());
                     }
                 } else {  // invoked when an error has occurred in the request
                     embedBuilder.setTitle(new WebhookEmbed.EmbedTitle("Check failed", resourceInfo.url))
