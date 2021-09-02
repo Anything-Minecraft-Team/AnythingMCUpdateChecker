@@ -1,4 +1,4 @@
-package org.anythingmc.updatechecker;
+package org.anythingmc.updatechecker.config;
 
 public class Link {
     public String type;

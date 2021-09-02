@@ -6,6 +6,10 @@ import club.minnced.discord.webhook.send.WebhookEmbedBuilder;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import lombok.Getter;
+import org.anythingmc.updatechecker.config.Config;
+import org.anythingmc.updatechecker.config.Link;
+import org.anythingmc.updatechecker.enums.LinkSite;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,8 +20,6 @@ import java.nio.file.Path;
 import java.util.Optional;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Getter
 public class UpdateChecker {
@@ -87,6 +89,8 @@ public class UpdateChecker {
     private static void checkUpdates() {
         int upToDate = 0;
         int outOfDate = 0;
+        int failed = 0;
+        int total = 0;
         boolean isRatingOutdated, isVersionOutdated, isStatusOutdated;
 
         WebhookEmbedBuilder embedBuilder = new WebhookEmbedBuilder();
@@ -107,6 +111,7 @@ public class UpdateChecker {
         // loop through all urls
         for (String url : links.urls) {
             for (OldInfo resourceInfo : request.getMdFile(url)) {
+                total++;
                 isRatingOutdated = false;
                 isVersionOutdated = false;
                 isStatusOutdated = false;
@@ -144,6 +149,7 @@ public class UpdateChecker {
                     JsonArray versions = object.get("testedVersions").getAsJsonArray();
                     String rating = object.get("rating").getAsJsonObject().get("average").getAsString();
                     rating = rating.substring(0, Math.min(rating.length(), 4));
+                    rating = rating.contains(".") ? rating.replaceAll("0*$","").replaceAll("\\.$","") : rating;
 
                     String oldVersions = resourceInfo.versions;
                     String oldRating = resourceInfo.rating;
@@ -160,8 +166,10 @@ public class UpdateChecker {
                             }
 
                     } else if(versions.size() == 2){
-                        String versionsTogether = versions.get(0).getAsString() + "-" + versions.get(1).getAsString();
-                        if(!versionsTogether.equals(oldVersions)) {
+                        int version1 = getMainVersion(versions.get(0).getAsString());
+                        int version2 = getMainVersion(versions.get(1).getAsString());
+                        String versionsTogether = version1 + "-" + version2;
+                        if(!versionsTogether.equals(oldVersions) && (version1++) == version2) {
                             isVersionOutdated = true;
                             resourceEmbedBuilder.addField(new WebhookEmbed.EmbedField(true, "Version", "Old: " + oldVersions + "\nNew: " + versions.get(0).getAsString() + "-" + versions.get(1).getAsString()));
                         }
@@ -191,13 +199,14 @@ public class UpdateChecker {
                             .setDescription(String.format("Could not check for updates for [this](%s) project, an error has occurred", resourceInfo.url))
                             .setColor(0xFF0000);
                     //webhookClient.send(embedBuilder.build());
+                    failed++;
                     System.out.println("Request failed for the url: " + resourceInfo.url);
                 }
             }
         }
 
         embedBuilder.setTitle(new WebhookEmbed.EmbedTitle("Finished checking for updates...", null))
-                .setDescription(String.format("Up to date: `%d`\nOut of date: `%d`", upToDate, outOfDate))
+                .setDescription(String.format("Up to date: `%d`\nOut of date: `%d`\nFailed: `%d`\nTotal: %d", upToDate, outOfDate, failed, total))
                 .setColor(0x2DEE12);
         webhookClient.send(embedBuilder.build());
 
@@ -226,5 +235,13 @@ public class UpdateChecker {
         } catch (MalformedURLException e) {
             return null;
         }
+    }
+
+    private static int getMainVersion(String version) {
+        version = version.replace("1.", "");
+        double doubleVersion = Double.parseDouble(version);
+        int x = (int) doubleVersion;
+        //version = String.valueOf(x);
+        return x;
     }
 }

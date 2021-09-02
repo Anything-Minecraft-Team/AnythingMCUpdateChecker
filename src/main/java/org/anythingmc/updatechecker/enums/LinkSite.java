@@ -1,4 +1,4 @@
-package org.anythingmc.updatechecker;
+package org.anythingmc.updatechecker.enums;
 
 public enum LinkSite {
     GITHUB,

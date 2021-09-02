@@ -6,7 +6,7 @@
 
     <groupId>org.anythingmc</groupId>
     <artifactId>updatechecker</artifactId>
-    <version>1</version>
+    <version>beta</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -38,7 +38,7 @@
         <dependency>
             <groupId>club.minnced</groupId>
             <artifactId>discord-webhooks</artifactId>
-            <version>0.5.7</version>
+            <version>0.5.8</version>
         </dependency>
         <dependency>
             <groupId>com.h2database</groupId>
