@@ -1,15 +1,17 @@
 package org.anythingmc.updatechecker;
 
-public class OldInfo {
+import org.anythingmc.updatechecker.enums.Status;
+
+public class Info {
 
     String versions;
     String rating;
     double price;
     String currency;
     String url;
-    String status;
+    Status status;
 
-    public OldInfo(String versions, String rating, double price, String currency, String url, String status){
+    public Info(String versions, String rating, double price, String currency, String url, Status status){
         this.versions = versions;
         this.rating = rating;
         this.price = price;

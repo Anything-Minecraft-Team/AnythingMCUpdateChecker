@@ -3,6 +3,8 @@ package org.anythingmc.updatechecker;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import org.anythingmc.updatechecker.enums.Status;
+import org.anythingmc.updatechecker.enums.StatusManager;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
@@ -38,7 +40,6 @@ public class Requests {
     }
 
     public Optional<JsonObject> getSpigotPluginInfo(String url) {
-        //System.out.println(url);
         if (url.endsWith("/"))
             url = url.substring(0, url.length() - 1);
         int index = url.lastIndexOf("/");
@@ -46,6 +47,7 @@ public class Requests {
             System.out.println("An invalid resource has been passed");
             return Optional.empty();
         }
+
         String resourceCode = url.substring(index);
         resourceCode = resourceCode.replaceAll("/", "");
 
@@ -53,14 +55,15 @@ public class Requests {
         try {
             HttpResponse response = httpClient.execute(get);  // stops here
             int statusCode = response.getStatusLine().getStatusCode();
+
             if (statusCode != 200) {  // Status code 200 --> OK
                 System.out.println(response.getStatusLine().getReasonPhrase());
                 return Optional.empty();
             }
+
             JsonElement element = new JsonParser().parse(new InputStreamReader(response.getEntity().getContent()));
             return Optional.of(element.getAsJsonObject());
         } catch (IOException error) {
-            //error.printStackTrace();
             System.out.println("Failed with " + SPIGOT_API_URL + resourceCode);
             return Optional.empty();
         } finally {
@@ -68,34 +71,51 @@ public class Requests {
         }
     }
 
-    public List<OldInfo> getMdFile(String url) {
+    public List<Info> getMdFile(String url) {
         try {
             URL newUrl = new URL(url);
 
             // read text returned by server
             BufferedReader in = new BufferedReader(new InputStreamReader(newUrl.openStream()));
 
-            List<OldInfo> resources = new ArrayList<>();
+            List<Info> resources = new ArrayList<>();
 
             String line, text = "";
-            while ((line = in.readLine()) != null) {
-                text = text + line + "\n";
-            }
+            while ((line = in.readLine()) != null) text = text + line + "\n";
 
-            final String regex = "^- \\[[^]\\[]+]\\((https?://[^\\s()]+)\\).*\\R(Version:.*)\\R(Rating:.*)\\R(\\S.+)$";
+            final String regex = "^- \\[[^]\\[]+]\\((https?://[^\\s()]+)\\).*\\R(  Version:.*)\\R(  Rating:.*)\\R(  \\S.+)$";
             final Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
             final Matcher matcher = pattern.matcher(text);
             while (matcher.find()) {
                 String version = matcher.group(2).replace("Version: ", "").replaceAll(" ", "");
                 String rating = matcher.group(3).replace("Rating: ", "").replaceAll(" ", "");
                 String resourceUrl = matcher.group(1);
-                String status = matcher.group(4);
+                Status status = Status.ACTIVE;
 
-                resources.add(new OldInfo(version, rating, 0.00, "USD", resourceUrl, status));
-                /**System.out.println("Link: " + matcher.group(1));
-                System.out.println("Version: " + matcher.group(2));
-                System.out.println("Rating: " + matcher.group(3));
-                System.out.println("Status: " + matcher.group(4));**/
+                switch (matcher.group(4).toLowerCase().replace(" ", "")) {
+                    case "currentlyinactive":
+                        status = Status.INACTIVE;
+                        break;
+                    case "discontinued":
+                        status = Status.DISCONTINUED;
+                        break;
+                    case "lost":
+                        status = Status.LOST;
+                        break;
+                    case "private":
+                        status = Status.PRIVATE;
+                        break;
+                    case "found":
+                        status = Status.FOUND;
+                        break;
+                    case "unreleased":
+                        status = Status.UNRELEASED;
+                        break;
+                }
+
+                if (matcher.group(4).toLowerCase().contains("price")) status = Status.PRICE;
+
+                resources.add(new Info(version, rating, 0.00, "USD", resourceUrl, status));
             }
             in.close();
 
